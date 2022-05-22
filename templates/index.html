@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <style> form { display: inline; }</style>
+    <script>
+            setInterval(updateInfo, 1000);
+
+            function updateInfo() {
+                var req = new XMLHttpRequest();
+                req.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var info = JSON.parse(this.responseText);
+
+                        var result = ""
+                        result += "<p>CPU Memory: " + info.cpu + "M</p>"
+                        result += "<p>GPU Memory: " + info.gpu + "M</p>"
+                        result += "<p>Temperature: " + info.temperature + "° C</p>"
+                        document.getElementById("info").innerHTML = result;
+                    }
+                };
+                req.open("GET", "/info", true);
+                req.send();
+            }
+
+    </script>
+    <title>Live Stream</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8  offset-lg-2">
+            <h1 class="mt-5">Video Surveillance System</h1>
+            <h4 style="color:{{ color }};">Alarm status: {{ alarm_activated }}</h4>
+            <form method="POST">
+                <input type="hidden" name="status" value="1">
+                <input type="submit" value="Activate alarm">
+            </form>
+            <form method="POST">
+                <input type="hidden" name="status" value="0">
+                <input type="submit" value="Deactivate alarm">
+            </form>
+            <br/><br/>
+            <h4>Email</h4>
+            <form method="POST">
+                <input type="text" name="email">
+                <input type="submit" value="Update email">
+            </form>
+            <br/><br/>
+            <img src="{{ url_for('video_feed') }}" width="100%" alt="Video stream unavailable">
+            </br></br>
+            <h4>Raspberry PI Info</h4>
+            <div id="info"></div>
+            <form action="/logout" method="post">
+                <input type="submit" value="Logout">
+            </form>
+            </br>
+        </div>
+    </div>
+</div>
+</body>
+</html>
