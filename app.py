@@ -82,7 +82,7 @@ def gen_frames():  # generate frame by frame from camera
 
                 if motion_detected:
                     now = datetime.datetime.now()
-                    if (now - motion_detected_timer).total_seconds() <= 0.75:
+                    if 0.75 <=(now - motion_detected_timer).total_seconds() <= 1:
                         cv2.imwrite("frame.jpg", frame)
                         motion_detected = False
                         print("Video Surveillance System: Frame saved")
@@ -142,8 +142,8 @@ def index():
 
 def send_mail_notification():
     global last_email_time
-    gmail.username = "sm.laborator00@gmail.com"
-    gmail.password = "smlaborator01A"
+    gmail.username = "YOUR GMAIL ADDRESS"
+    gmail.password = "YOUR PASSWORD"
     last_email_time = datetime.datetime.now()
     gmail.send(
         subject="Video Surveillance System",
